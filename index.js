@@ -18,10 +18,20 @@ app.post('/screenshot', async (req, res) => {
 
   try {
     const browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ['--no-sandbox', 
+	     '--disable-setuid-sandbox',
+      	      "--disable-dev-shm-usage",
+              "--disable-accelerated-2d-canvas",
+              "--no-first-run",
+              "--no-zygote",
+              "--disable-gpu"
+             ]
     });
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.goto(url, { 
+	    waitUntil: 'networkidle2', 
+	    timeout: 300000
+    });
     await page.screenshot({ path: outputPath, fullPage: true });
     await browser.close();
 
